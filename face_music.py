@@ -1,3 +1,9 @@
+# ============================================================================
+# face_music.py - your face is the instrument: the webcam reads facial
+# landmarks (MediaPipe) and turns your expressions into music - head tilt,
+# mouth shape and friends drive an arpeggio synth's tempo, pitch, scale
+# (major/minor), stereo pan and filter brightness in real time.
+# ============================================================================
 import numpy as np
 import sounddevice as sd
 import cv2

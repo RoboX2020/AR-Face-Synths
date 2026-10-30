@@ -1,3 +1,8 @@
+# ============================================================================
+# face_sfx.py - cartoon sound effects played by your face: open your mouth,
+# raise your eyebrows and other expressions trigger synthesized boings,
+# slides and zaps (SFXEngine) with floating text labels on the webcam view.
+# ============================================================================
 import numpy as np
 import sounddevice as sd
 import cv2
