@@ -15,6 +15,9 @@ from collections import deque
 MODEL_PATH = "face_landmarker.task"
 
 # --- AUDIO SFX SYNTHESIZER ---
+# # The cartoon sound board: each expression queues a small synthesized
+# # sound (built from sine waves and noise - no audio files), and the audio
+# # callback mixes whatever is currently playing.
 class SFXEngine:
     def __init__(self, sample_rate=44100):
         self.sample_rate = sample_rate
@@ -128,6 +131,7 @@ class SFXEngine:
 def dist(p1, p2, w, h):
     return math.sqrt(((p1.x - p2.x)*w)**2 + ((p1.y - p2.y)*h)**2)
 
+# # A word ('BOING!') that floats upward and fades after a sound triggers.
 class FloatingText:
     def __init__(self, text, x, y, color):
         self.text = text
@@ -150,6 +154,7 @@ class FloatingText:
             cv2.putText(img, self.text, (int(self.x), int(self.y)), cv2.FONT_HERSHEY_DUPLEX, 
                         scale, c, 3, cv2.LINE_AA)
 
+# # Convert a landmark's 0-1 position into pixel coordinates.
 def pt(lm, w, h): return (int(lm.x * w), int(lm.y * h))
 
 def main():

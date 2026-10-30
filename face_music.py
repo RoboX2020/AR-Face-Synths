@@ -18,12 +18,19 @@ MODEL_PATH = "face_landmarker.task"
 # Frequencies for Arpeggios
 BASE_FREQ = 130.81 # C3
 
+# # Convert semitones (piano-key steps) to a frequency in Hz: each step
+# # multiplies by the 12th root of 2 - the math behind all Western tuning.
 def note_freq(semitones):
     return BASE_FREQ * (2 ** (semitones / 12.0))
 
+# # The up-down note patterns your face switches between (major = happy,
+# # minor = moody).
 MAJOR_ARP = [note_freq(0), note_freq(4), note_freq(7), note_freq(12), note_freq(7), note_freq(4)]
 MINOR_ARP = [note_freq(0), note_freq(3), note_freq(7), note_freq(12), note_freq(7), note_freq(3)]
 
+# # The arpeggio synthesizer: loops through the note pattern at the chosen
+# # tempo while your face steers tempo, pitch, major/minor, stereo pan and
+# # brightness. The sound card calls _audio_callback for more samples.
 class ArpSynth:
     def __init__(self, sample_rate=44100):
         self.sample_rate = sample_rate
@@ -138,9 +145,11 @@ class ArpSynth:
         self.stream.close()
 
 # Geometric Helpers
+# # Pixel distance between two face landmarks.
 def dist(p1, p2, w, h):
     return math.sqrt(((p1.x - p2.x)*w)**2 + ((p1.y - p2.y)*h)**2)
 
+# # OpenCV has no rounded rectangle, so build one from circles + rectangles.
 def draw_rounded_rect(img, pt1, pt2, color, thickness=cv2.FILLED, r=10):
     x1, y1 = pt1
     x2, y2 = pt2
@@ -161,6 +170,7 @@ def draw_rounded_rect(img, pt1, pt2, color, thickness=cv2.FILLED, r=10):
         cv2.ellipse(img, (x1+r, y2-r), (r, r), 90, 0, 90, color, thickness)
         cv2.ellipse(img, (x2-r, y2-r), (r, r), 0, 0, 90, color, thickness)
 
+# # One labeled on-screen slider showing a live value (tempo, pitch...).
 def draw_bar(img, x, y, w, h, val, min_v, max_v, title, color):
     val = max(min_v, min(max_v, val))
     pct = (val - min_v) / (max_v - min_v) if max_v > min_v else 0
